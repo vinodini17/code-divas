@@ -6,9 +6,8 @@ from dotenv import load_dotenv
 load_dotenv()
 TOKEN = os.getenv("DISCORD_TOKEN")
 
-
 intents = discord.Intents.default()
-bot = commands.Bot(command_prefix="!", intents=intents)
+bot = commands.Bot(command_prefix="!", intents=discord.Intents.default())
 
 @bot.event
 async def on_ready():
@@ -17,6 +16,5 @@ async def on_ready():
 @bot.command()
 async def scan(ctx, ip: str):
     await ctx.send(f"🔍 Scanning {ip}... (Functionality will be added here)")
-
 
 bot.run(TOKEN)
