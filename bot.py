@@ -32,8 +32,7 @@ def send_alert(ip, port):
 async def on_ready():
     print(f"✅ Logged in as {bot.user}")
 
-
-# Google Sheets API setup (removed merge conflict markers)
+# Google Sheets API setup
 scope = ["https://spreadsheets.google.com/feeds", "https://www.googleapis.com/auth/spreadsheets"]
 creds = ServiceAccountCredentials.from_json_keyfile_name("credentials.json", scope)
 # Google Sheets authentication
@@ -52,6 +51,7 @@ async def scan(ctx, ip: str):
     try:
         nm.scan(ip, arguments='-F')  # Fast scan
         result = ""
+        critical_ports_found = False  # Flag to track if any critical ports are found
 
         for host in nm.all_hosts():
             result += f"**Host:** {host} ({nm[host].hostname()})\n"
@@ -63,20 +63,26 @@ async def scan(ctx, ip: str):
                     # Send alerts for critical ports (SSH, RDP)
                     if port in [22, 3389]:  # SSH (22) and RDP (3389) are high-risk ports
                         send_alert(host, port)
+                        critical_ports_found = True  # Mark that critical port was found
 
         if result:
             await ctx.send(f"```{result}```")
-            # Log the results to Google Sheets
+            status = "Critical Ports Found" if critical_ports_found else "Scan Completed"
+            # Log the results to Google Sheets with a new "Status" column
             timestamp = datetime.now().strftime('%Y-%m-%d %H:%M:%S')
-            sheet.append_row([timestamp, ip, result])  # Append the timestamp, IP, and results to the sheet
+            sheet.append_row([timestamp, ip, status, result])  # Add status in the third column
         else:
             await ctx.send("✅ No open ports found.")
-            # Log the "No open ports" to Google Sheets
+            status = "No Open Ports Found"
+            # Log the "No open ports" to Google Sheets with a new "Status" column
             timestamp = datetime.now().strftime('%Y-%m-%d %H:%M:%S')
-            sheet.append_row([timestamp, ip, "No open ports found."])
+            sheet.append_row([timestamp, ip, status, "No open ports found."])
 
     except Exception as e:
         await ctx.send(f"⚠️ Error scanning {ip}: {e}")
+        timestamp = datetime.now().strftime('%Y-%m-%d %H:%M:%S')
+        # Log the error to Google Sheets with a new "Status" column
+        sheet.append_row([timestamp, ip, "Scan Failed", str(e)])
 
 # Run the bot with the provided token
 bot.run(TOKEN)
