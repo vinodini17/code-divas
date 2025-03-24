@@ -6,8 +6,11 @@ from dotenv import load_dotenv
 load_dotenv()
 TOKEN = os.getenv("DISCORD_TOKEN")
 
+# Enable intents, including message content
 intents = discord.Intents.default()
-bot = commands.Bot(command_prefix="!", intents=discord.Intents.default())
+intents.message_content = True  # Required for commands to work
+
+bot = commands.Bot(command_prefix="!", intents=intents)
 
 @bot.event
 async def on_ready():
