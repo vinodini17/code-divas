@@ -4,6 +4,8 @@ import os
 import nmap
 import requests
 from dotenv import load_dotenv
+import gspread
+from oauth2client.service_account import ServiceAccountCredentials
 
 # Load environment variables
 load_dotenv()
@@ -29,7 +31,12 @@ def send_alert(ip, port):
 async def on_ready():
     print(f"✅ Logged in as {bot.user}")
 
-# Command to scan an IP address
+# Google Sheets API setup (removed merge conflict markers)
+scope = ["https://spreadsheets.google.com/feeds", "https://www.googleapis.com/auth/spreadsheets"]
+creds = ServiceAccountCredentials.from_json_keyfile_name("your-credentials.json", scope)
+client = gspread.authorize(creds)
+sheet = client.open("NmapScanLogs").sheet1  # Open the spreadsheet by name, change this to your sheet name
+
 @bot.command()
 async def scan(ctx, ip: str):
     """Scans a given IP address using Nmap and returns open ports."""
