@@ -1,2 +1,1 @@
-bot token =
-"MTM1MzYwMzIwNjgxMDE3MzUwMQ.GOQ1VW.bSFxJ3HGgTqalyblIgo1FBaAFNd7F2y8M2KkV8"
+bot token ="x12345"
