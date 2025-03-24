@@ -35,7 +35,7 @@ async def on_ready():
 
 # Google Sheets API setup (removed merge conflict markers)
 scope = ["https://spreadsheets.google.com/feeds", "https://www.googleapis.com/auth/spreadsheets"]
-creds = ServiceAccountCredentials.from_json_keyfile_name("your-credentials.json", scop
+creds = ServiceAccountCredentials.from_json_keyfile_name("credentials.json", scope)
 # Google Sheets authentication
 scope = ["https://www.googleapis.com/auth/spreadsheets", "https://www.googleapis.com/auth/drive"]
 creds = ServiceAccountCredentials.from_json_keyfile_name("credentials.json", scope)
