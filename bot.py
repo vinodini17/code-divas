@@ -1,4 +1,5 @@
 import discord
+import nmap
 from discord.ext import commands
 import os
 from dotenv import load_dotenv
