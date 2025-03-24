@@ -39,22 +39,21 @@ async def scan(ctx, ip: str):
     try:
         # Perform a fast scan on the provided IP address
         nm.scan(ip, arguments='-F')  # Fast scan option (-F)
-        result = []  # Initialize an empty list to store scan results
+        result = ""  # Initialize an empty string to store the scan results
 
         # Iterate through the scan results for each host
         for host in nm.all_hosts():
+            result += f"**Host:** {host} ({nm[host].hostname()})\n"
+            # Check each protocol (e.g., TCP, UDP) found for the host
             for proto in nm[host].all_protocols():
+                result += f"**Protocol:** {proto}\n"
+                # Check each port for the given protocol
                 for port in nm[host][proto].keys():
-                    # Collect host, protocol, port, and state
-                    result.append([host, proto, port, nm[host][proto][port]['state']])
-
-        # Append the scan results to Google Sheets
-        if result:
-            sheet.append_rows(result)  # Append rows to the Google Sheet
+                    result += f"Port: `{port}` - **State:** {nm[host][proto][port]['state']}\n"
 
         # Send the scan results to Discord or notify if no open ports were found
         if result:
-            await ctx.send("Scan results logged successfully!")
+            await ctx.send(f"```{result}```")
         else:
             await ctx.send("✅ No open ports found.")
 
