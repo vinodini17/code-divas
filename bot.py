@@ -6,6 +6,7 @@ import requests
 from dotenv import load_dotenv
 import gspread
 from oauth2client.service_account import ServiceAccountCredentials
+from datetime import datetime  # To add a timestamp for the logs
 
 # Load environment variables
 load_dotenv()
@@ -31,9 +32,14 @@ def send_alert(ip, port):
 async def on_ready():
     print(f"✅ Logged in as {bot.user}")
 
+
 # Google Sheets API setup (removed merge conflict markers)
 scope = ["https://spreadsheets.google.com/feeds", "https://www.googleapis.com/auth/spreadsheets"]
-creds = ServiceAccountCredentials.from_json_keyfile_name("your-credentials.json", scope)
+creds = ServiceAccountCredentials.from_json_keyfile_name("your-credentials.json", scop
+# Google Sheets authentication
+scope = ["https://www.googleapis.com/auth/spreadsheets", "https://www.googleapis.com/auth/drive"]
+creds = ServiceAccountCredentials.from_json_keyfile_name("credentials.json", scope)
+
 client = gspread.authorize(creds)
 sheet = client.open("NmapScanLogs").sheet1  # Open the spreadsheet by name, change this to your sheet name
 
@@ -60,8 +66,14 @@ async def scan(ctx, ip: str):
 
         if result:
             await ctx.send(f"```{result}```")
+            # Log the results to Google Sheets
+            timestamp = datetime.now().strftime('%Y-%m-%d %H:%M:%S')
+            sheet.append_row([timestamp, ip, result])  # Append the timestamp, IP, and results to the sheet
         else:
             await ctx.send("✅ No open ports found.")
+            # Log the "No open ports" to Google Sheets
+            timestamp = datetime.now().strftime('%Y-%m-%d %H:%M:%S')
+            sheet.append_row([timestamp, ip, "No open ports found."])
 
     except Exception as e:
         await ctx.send(f"⚠️ Error scanning {ip}: {e}")
