@@ -19,7 +19,7 @@ intents.message_content = True  # Required for commands to work
 bot = commands.Bot(command_prefix="!", intents=intents)
 
 # Discord Webhook URL for sending alerts
-WEBHOOK_URL = "https://discordapp.com/api/webhooks/1353672894500306976/nW2Zq8LSD_aW6nFd2aLSY9SHmCQjV6pvAmDShi0J3UaS3XHKPOc-wBie7Wu-_MmTOihP"  # Replace with your Discord webhook URL
+WEBHOOK_URL = "https://discord.com/api/webhooks/1353663724891799572/Ls23p2QqaOdvjGByL-WNLrU0VysNME8O-vbM4o6kMvvNoWY0b01VQ8vV9D5eAnvN3_gO"  # Replace with your Discord webhook URL
 
 # Function to send alerts for critical ports (SSH, RDP)
 def send_alert(ip, port):
