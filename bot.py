@@ -1,10 +1,12 @@
 import discord
 from discord.ext import commands
+import os
+from dotenv import load_dotenv
 
-# Insert your bot token here
-TOKEN = "YOUR_DISCORD_BOT_TOKEN"
+load_dotenv()
+TOKEN = os.getenv("DISCORD_TOKEN")
 
-# Set up bot with command prefix
+
 intents = discord.Intents.default()
 bot = commands.Bot(command_prefix="!", intents=intents)
 
@@ -16,5 +18,5 @@ async def on_ready():
 async def scan(ctx, ip: str):
     await ctx.send(f"🔍 Scanning {ip}... (Functionality will be added here)")
 
-# Run the bot
+
 bot.run(TOKEN)
