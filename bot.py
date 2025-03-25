@@ -7,10 +7,19 @@ from dotenv import load_dotenv
 import gspread
 from oauth2client.service_account import ServiceAccountCredentials
 from datetime import datetime  # To add a timestamp for the logs
+import base64
 
 # Load environment variables
 load_dotenv()
 TOKEN = os.getenv("DISCORD_TOKEN")
+
+# Retrieve the base64-encoded Google credentials from environment variable
+google_credentials = os.getenv('GOOGLE_CREDENTIALS')
+if google_credentials:
+    with open('credentials.json', 'wb') as f:
+        f.write(base64.b64decode(google_credentials))
+else:
+    print("No Google credentials found in environment variables!")
 
 # Enable intents, including message content
 intents = discord.Intents.default()
