@@ -1,6 +1,6 @@
 discord.py==2.5.2
 python-dotenv==1.0.1
-nmap==0.7.1
+python-nmap
 requests==2.32.3
 gspread==6.2.0
 oauth2client==4.1.3
