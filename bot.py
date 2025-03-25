@@ -8,6 +8,16 @@ import gspread
 from oauth2client.service_account import ServiceAccountCredentials
 from datetime import datetime  # To add a timestamp for the logs
 import base64
+from flask import Flask
+
+app = Flask(__name__)
+
+@bot.route("/health")
+def health():
+    return "OK", 200  # Returns a 200 status to indicate the bot is running
+
+if __name__ == "__main__":
+    app.run(host="0.0.0.0", port=8080)
 
 # Load environment variables
 load_dotenv()
